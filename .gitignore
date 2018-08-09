@@ -1,0 +1,17 @@
+# IDE files
+/.idea/
+.tags
+.tags*
+/.local/
+/.project
+/.ropeproject/
+
+# Distribution / packaging
+.env
+/venv/
+
+*.pyc
+
+[remote "heroku"]
+    url = git@heroku.com:`https://git.heroku.com/vast-stream-89152.git
+    fetch = +refs/heads/*:refs/remotes/heroku/*

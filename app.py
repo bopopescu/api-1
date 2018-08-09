@@ -28,10 +28,10 @@ def index():
     return 'Hello world!'
 
 
-@app.route('/toto')
-def toto():
-    print(request)
-    return 'Hello world!'
+@app.errorhandler(werkzeug.exceptions.BadRequest)
+def handle_bad_request(e):
+    return 'bad request!', 400
+
 
 
 @app.route('/api/recipes', methods=['GET'])
