@@ -9,6 +9,7 @@
 # Distribution / packaging
 .env
 /venv/
+env/
 
 *.pyc
 Procfile
