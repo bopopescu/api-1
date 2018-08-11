@@ -33,7 +33,6 @@ def handle_bad_request(e):
     return 'bad request!', 400
 
 
-
 @app.route('/api/recipes', methods=['GET'])
 def getRecipes():
     conn = getConnector()
@@ -49,12 +48,12 @@ def getRecipes():
             "datas": rows
         }), 200, {
         'Content-Type': 'Application/json'
-    })
+    	})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
     from werkzeug.serving import run_simple
 
-    application.debug = True
-    run_simple('0.0.0.0', 000, application, use_reloader=True, use_debugger=True)
+    # application.debug = True
+    run_simple('0.0.0.0', 000, application)
