@@ -38,7 +38,7 @@ def error404(error):
 
 @app.route('/')
 def index():
-    return json.dumps({"API RTP Sarah Al Janabi" : "Etape 1"}), 404
+    return json.dumps({"API RTP Sarah Al Janabi" : "Etape 1"})
 
 
 @app.route('/api/recipes.json', methods=['GET'])
@@ -65,9 +65,3 @@ def getRecipes():
               }), 200, {
               'Content-Type': 'Application/json'
         })
-
-from werkzeug.serving import run_simple
-
-if __name__ == '__main__':
-    app.run()
-run_simple('0.0.0.0', 5000, app, use_reloader=True)
