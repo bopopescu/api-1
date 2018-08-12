@@ -26,35 +26,40 @@ def getConnector():
 
 @app.route('/')
 def index():
-    return 'Hello world!'
+    return 'API REST Sarah Al Janabi - session de rattrapage - Première étape accessible par la route /api/recipes.json'
 
 
 @app.errorhandler(werkzeug.exceptions.BadRequest)
 def handle_bad_request(e):
     return 'bad request!', 400
 
-
-@app.route('/api/recipes', methods=['GET'])
+@app.route('/api/recipes.json', methods=['GET'])
 def getRecipes():
     conn = getConnector()
+    if not conn:
+        return Response(json.dumps(
+            {
+                "code":200,
+                "message" : "no connector"
+            }), 200, {
+            'Content-Type': 'Application/json'
+        })
     cursor = conn.cursor(dictionary=True)
     query = "SELECT id, name, slug FROM recipes__recipe;"
     cursor.execute(query)
     rows = cursor.fetchall()
     print(rows)
     return Response(json.dumps(
-        {
-            "code": 200,
-            "message": "ok",
-            "datas": rows
-        }), 200, {
-        'Content-Type': 'Application/json'
-    	})
+             {
+                "code": 200,
+                "message": "ok",
+                "datas": rows
+              }), 200, {
+              'Content-Type': 'Application/json'
+        })
 
 
 if __name__ == '__main__':
     app.run()
-    from werkzeug.serving import run_simple
-
-    # application.debug = True
-    run_simple('0.0.0.0', 000, application)
+from werkzeug.serving import run_simple
+run_simple('0.0.0.0', 000, application)
