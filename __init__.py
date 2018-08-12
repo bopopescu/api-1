@@ -23,15 +23,23 @@ def getConnector():
         print(e)
         return False
 
+@app.errorhandler(400)
+def error400(error):
+    return json.dumps({"code" : 400, "message" : "Bad Request"}), 400
+@app.errorhandler(401)
+def error401(error):
+    return json.dumps({"code" : 401, "message" : "Unauthorized"}), 401
+@app.errorhandler(403)
+def error403(error):
+    return json.dumps({"code" : 403, "message" : "Forbidden"}), 403
+@app.errorhandler(404)
+def error404(error):
+    return json.dumps({"code" : 404, "message" : "Not Found"}), 404
 
 @app.route('/')
 def index():
-    return 'API REST Sarah Al Janabi - session de rattrapage - Première étape accessible par la route /api/recipes.json'
+    return json.dumps({"API RTP Sarah Al Janabi" : "Etape 1"}), 404
 
-
-@app.errorhandler(werkzeug.exceptions.BadRequest)
-def handle_bad_request(e):
-    return 'bad request!', 400
 
 @app.route('/api/recipes.json', methods=['GET'])
 def getRecipes():
@@ -58,8 +66,8 @@ def getRecipes():
               'Content-Type': 'Application/json'
         })
 
+from werkzeug.serving import run_simple
 
 if __name__ == '__main__':
     app.run()
-from werkzeug.serving import run_simple
-run_simple('0.0.0.0', 000, application)
+run_simple('0.0.0.0', 5000, app, use_reloader=True)
