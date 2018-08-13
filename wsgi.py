@@ -1,7 +1,12 @@
-from __init__ import app as application
+from __init__ import app
 from flask import Flask
-
-app = Flask(__name__)
+from werkzeug.serving import run_simple
 
 if __name__ == "__main__":
-    application.run()
+    app.run()
+
+#app = Flask(__name__)
+
+#if __name__ == "__main__":
+#    application.run()
+#run_simple('0.0.0.0', 000, application)
