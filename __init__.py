@@ -1,6 +1,8 @@
 import mysql.connector
 import json
 import werkzeug
+import random
+import string
 
 from flask import Flask
 from flask import request
@@ -182,24 +184,26 @@ def createRecipe():
     cursor = conn.cursor(dictionary=True)
 
     # Si le mot de passe ne correspond a aucun user en base
-    userpass = request.headers['Authorization']
+    userpass = request.headers.get('Authorization', default = None)
     if (userpass is None):
-        return Response(json.dumps({'code' : 401, 'message': 'bad request'}), 401, {'Content-Type': 'Application/json'})
+        return Response(json.dumps({'code' : 401, 'message': 'Unauthorized'}), 401, {'Content-Type': 'Application/json'})
 
     check_user_query = "SELECT id, username, last_login FROM users__user WHERE password = %s LIMIT 1;"
     cursor.execute(check_user_query, (userpass,))
     row_user = cursor.fetchone()
     if row_user is None:
-        return Response(json.dumps({'code' : 403, 'message': 'invalid password'}), 403, {'Content-Type': 'Application/json'})
+        return Response(json.dumps({'code' : 403, 'message': 'Invalid Password'}), 403, {'Content-Type': 'Application/json'})
 
     user_id = row_user['id']
 
     # Récupération des données du formulaire
     post_data = request.form
     steps = post_data.getlist('step[]')
-    name = post_data.get('name')
+    name = post_data.get('name', default = None)
+    if name is None:
+        return Response(json.dumps({'code' : 400, 'message': 'Bad Request'}), 400, {'Content-Type': 'Application/json'})
+    slug = post_data.get('slug', default = None)
 
-    slug = post_data.get('slug', default=None)
     # Si le slug est précisé, je vérifie qu'une recette avec le meme slug n'existe pas
     if slug is not None:
         check_slug_query = "SELECT slug FROM recipes__recipe WHERE slug = %s;"
@@ -234,7 +238,7 @@ def createRecipe():
         'datas' : {
             'id' : id,
             'name' : name,
-            'slug' : 'slug',
+            'slug' : slug,
             'user' : {
                 'username' : row_user['username'],
                 'last_login' : row_user['last_login'].strftime('%Y-%m-%dT%H:%M:%S %z'),
