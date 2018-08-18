@@ -201,7 +201,7 @@ def createRecipe():
     steps = post_data.getlist('step[]')
     name = post_data.get('name', default = None)
     if name is None:
-        return Response(json.dumps({'code' : 400, 'message': 'Bad Request'}), 400, {'Content-Type': 'Application/json'})
+        return Response(json.dumps({'code' : 400, 'message': 'Bad Request', 'datas' : []}), 400, {'Content-Type': 'Application/json'})
     slug = post_data.get('slug', default = None)
 
     # Si le slug est précisé, je vérifie qu'une recette avec le meme slug n'existe pas
@@ -210,7 +210,7 @@ def createRecipe():
         cursor.execute(check_slug_query, (slug,))
         row = cursor.fetchone()
         if row is not None:
-            return Response(json.dumps({'code' : 400, 'message' : 'bad request'}), 400, {'Content-Type': 'Application/json'})
+            return Response(json.dumps({'code' : 400, 'message' : 'Bad Request', 'datas': []}), 400, {'Content-Type': 'Application/json'})
     # Si le slug nest pas précisé, je génère un slug a partir du nom.
     else:
         slug = slugify(name)
